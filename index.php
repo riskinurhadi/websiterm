@@ -1,6 +1,9 @@
 <?php
 /**
  * File: index.php
+ * Deskripsi: Halaman Beranda / Index utama pengguna untuk Yayasan Pondok Pesantren Raudlatul Muta'allimin.
+ * Mengintegrasikan koneksi.php untuk mengambil data dinamis langsung dari database MySQL Anda.
+ * Dilengkapi dengan fallback data otomatis jika tabel database masih kosong.
  */
 
 // Memasukkan file koneksi database
@@ -335,11 +338,11 @@ include 'navbar.php';
         border-top: 4px solid var(--kemenag-green-primary) !important;
     }
 
-    /* --- FEATURE CARDS SECTION (BARU) --- */
+    /* --- FEATURE CARDS SECTION --- */
     .features-section {
         background-color: var(--light-neutral);
         padding: 0 0 60px 0;
-        margin-top: -60px; /* Tarik sedikit ke atas agar overlap dengan hero */
+        margin-top: -60px;
         position: relative;
         z-index: 10;
     }
@@ -370,7 +373,65 @@ include 'navbar.php';
         margin: 0 auto 20px auto;
     }
 
-    /* --- PARALLAX CTA SECTION (BARU) --- */
+    /* --- JADWAL SHOLAT SECTION (BARU) --- */
+    .prayer-section {
+        background: linear-gradient(135deg, var(--kemenag-green-dark) 0%, var(--dark-neutral) 100%);
+        padding: 60px 0;
+        color: white;
+        position: relative;
+    }
+    .prayer-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        padding: 20px 15px;
+        text-align: center;
+        transition: var(--transition-smooth);
+    }
+    .prayer-card:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-5px);
+    }
+    .prayer-icon {
+        font-size: 1.8rem;
+        color: #fde047; /* Yellow/Gold */
+        margin-bottom: 10px;
+    }
+
+    /* --- FLOATING DEV BADGE (BARU) --- */
+    .dev-badge {
+        position: fixed;
+        bottom: 25px;
+        left: 25px;
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: blur(8px);
+        color: white;
+        padding: 12px 22px;
+        border-radius: 50px;
+        z-index: 9999;
+        border: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        animation: floatBubble 3s ease-in-out infinite;
+    }
+    @keyframes floatBubble {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-8px); }
+        100% { transform: translateY(0px); }
+    }
+    @media (max-width: 768px) {
+        .dev-badge {
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            justify-content: center;
+        }
+    }
+
+    /* --- PARALLAX CTA SECTION --- */
     .parallax-cta {
         background-image: linear-gradient(rgba(0, 168, 107, 0.85), rgba(0, 125, 79, 0.9)), url('https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?q=80&w=2000&auto=format&fit=crop');
         background-attachment: fixed;
@@ -403,16 +464,14 @@ include 'navbar.php';
 </style>
 
 <!-- ==============================================
-     1. HERO / LANDING BANNER SECTION (MODERN, CLEAN & LEFT ALIGNED)
+     1. HERO / LANDING BANNER SECTION
      ============================================== -->
 <section id="beranda" class="hero-section position-relative d-flex align-items-center" style="background-color: #ffffff; min-height: 80vh; padding: 140px 0 160px 0;">
-    <!-- Desain Elemen Latar Belakang Geometris Minimalis -->
     <div style="position: absolute; top: -10%; right: -5%; width: 50%; height: 70%; background: radial-gradient(circle, var(--kemenag-green-light) 0%, rgba(255,255,255,0) 70%); z-index: 1; pointer-events: none;"></div>
     <div style="position: absolute; bottom: -5%; left: -5%; width: 40%; height: 60%; background: radial-gradient(circle, var(--kemenag-green-light) 0%, rgba(255,255,255,0) 60%); z-index: 1; pointer-events: none;"></div>
 
     <div class="container position-relative" style="z-index: 2;">
         <div class="row">
-            <!-- Teks Hero Rata Kiri untuk Mengantisipasi Custom Background Image -->
             <div class="col-lg-8 text-start">
                 <div class="mb-4 d-inline-flex">
                     <span class="badge-modern">
@@ -420,7 +479,7 @@ include 'navbar.php';
                     </span>
                 </div>
                 <h1 class="display-4 fw-extrabold mb-4 text-dark" style="font-weight: 850; line-height: 1.2; letter-spacing: -1.5px;">
-                    Mendidik Generas <span style="color: var(--kemenag-green-primary);">Cerdas</span><br>& Berkarakter Islami
+                    Mendidik Generasi <span style="color: var(--kemenag-green-primary);">Cerdas</span><br>& Berkarakter Islami
                 </h1>
                 <p class="lead mb-5" style="max-width: 680px; font-size: 1.15rem; line-height: 1.9; color: var(--text-muted-custom);">
                     Menyelenggarakan pendidikan formal terpadu yang memadukan kedalaman spiritual pesantren salafiah dengan keahlian praktis teknologi masa kini di Kasui, Way Kanan, Lampung.
@@ -440,45 +499,54 @@ include 'navbar.php';
 <section class="features-section">
     <div class="container">
         <div class="row g-4 justify-content-center">
-            <!-- Fitur 1 -->
             <div class="col-md-6 col-lg-3">
                 <div class="feature-card">
-                    <div class="feature-icon-wrapper">
-                        <i class="fas fa-university"></i>
-                    </div>
+                    <div class="feature-icon-wrapper"><i class="fas fa-university"></i></div>
                     <h5 class="fw-bold text-dark mb-3">Profil Madrasah</h5>
                     <p class="text-muted small mb-0">Kenali lebih dalam sejarah, visi, misi, serta fasilitas yang kami sediakan untuk menunjang pendidikan.</p>
                 </div>
             </div>
-            <!-- Fitur 2 -->
             <div class="col-md-6 col-lg-3">
                 <div class="feature-card">
-                    <div class="feature-icon-wrapper">
-                        <i class="far fa-newspaper"></i>
-                    </div>
+                    <div class="feature-icon-wrapper"><i class="far fa-newspaper"></i></div>
                     <h5 class="fw-bold text-dark mb-3">Pusat Informasi</h5>
                     <p class="text-muted small mb-0">Dapatkan berita terbaru, pengumuman penting, dan agenda kegiatan madrasah secara cepat dan akurat.</p>
                 </div>
             </div>
-            <!-- Fitur 3 -->
             <div class="col-md-6 col-lg-3">
                 <div class="feature-card">
-                    <div class="feature-icon-wrapper">
-                        <i class="fas fa-trophy"></i>
-                    </div>
+                    <div class="feature-icon-wrapper"><i class="fas fa-trophy"></i></div>
                     <h5 class="fw-bold text-dark mb-3">Prestasi & Galeri</h5>
                     <p class="text-muted small mb-0">Lihat berbagai pencapaian siswa dan guru, serta dokumentasi kegiatan dalam galeri foto dan video kami.</p>
                 </div>
             </div>
-            <!-- Fitur 4 -->
             <div class="col-md-6 col-lg-3">
                 <div class="feature-card">
-                    <div class="feature-icon-wrapper">
-                        <i class="fas fa-globe"></i>
-                    </div>
+                    <div class="feature-icon-wrapper"><i class="fas fa-globe"></i></div>
                     <h5 class="fw-bold text-dark mb-3">Layanan Digital</h5>
                     <p class="text-muted small mb-0">Akses mudah untuk pendaftaran siswa baru (PPDB), informasi kontak, dan layanan digital lainnya.</p>
                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==============================================
+     1B. SECTION JADWAL SHOLAT (API REAL-TIME)
+     ============================================== -->
+<section class="prayer-section">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h3 class="fw-bold mb-2" style="letter-spacing: -0.5px;">Jadwal Sholat Hari Ini</h3>
+            <p class="mb-0 text-white-50 small">
+                <i class="fas fa-map-marker-alt text-warning me-1"></i> Kasui, Way Kanan & Sekitarnya | <span id="hijri-date">Memuat kalender...</span>
+            </p>
+        </div>
+        
+        <div class="row justify-content-center g-3" id="prayer-times-container">
+            <!-- Fallback Loader UI sebelum data API ditarik -->
+            <div class="col-12 text-center text-white-50 small" id="prayer-loader">
+                <div class="spinner-border spinner-border-sm me-2" role="status"></div> Mengambil data waktu sholat...
             </div>
         </div>
     </div>
@@ -490,23 +558,19 @@ include 'navbar.php';
 <section id="tentang" class="py-5" style="background-color: #ffffff; padding-top: 80px !important; padding-bottom: 80px !important;">
     <div class="container">
         <div class="row align-items-center g-5">
-            <!-- Kolom Gambar: Disembunyikan di Mobile (d-none), Ditampilkan di Desktop (d-lg-block) -->
             <div class="col-lg-5 order-2 order-lg-1 d-none d-lg-block">
                 <div class="position-relative">
                     <?php 
-                        // Fallback foto jika database/link kosong
                         $foto_about = $foto_tentang;
                         if(empty($foto_about)){
                             $foto_about = 'https://images.unsplash.com/photo-1584697964400-2af6a2f62651?q=80&w=800&h=600&fit=crop';
                         }
                     ?>
                     <img src="<?php echo htmlspecialchars($foto_about); ?>" class="img-fluid rounded-4 shadow" alt="Tentang Pesantren" style="width: 100%; height: auto; object-fit: cover; border: 4px solid var(--kemenag-green-light);">
-                    <!-- Aksen Titik Kotak -->
                     <div style="position: absolute; bottom: -20px; right: -20px; width: 100px; height: 100px; background-image: radial-gradient(var(--kemenag-green-primary) 20%, transparent 20%); background-size: 10px 10px; z-index: -1; opacity: 0.3;"></div>
                 </div>
             </div>
             
-            <!-- Kolom Teks -->
             <div class="col-lg-7 order-1 order-lg-2 text-start">
                 <span class="section-subtitle">Sekilas Profil</span>
                 <h2 class="section-title mb-4" style="font-size: 2rem;">Tentang <?php echo htmlspecialchars($nama_pesantren); ?></h2>
@@ -514,7 +578,6 @@ include 'navbar.php';
                 
                 <p class="text-muted" style="line-height: 1.8; font-size: 1.05rem;">
                     <?php 
-                        // Mengambil 300 karakter pertama dari tentang pondok
                         $excerpt = strip_tags($tentang_pondok);
                         if (strlen($excerpt) > 300) {
                             echo htmlspecialchars(substr($excerpt, 0, 300)) . '...';
@@ -525,7 +588,6 @@ include 'navbar.php';
                 </p>
                 
                 <div class="mt-4 pt-2">
-                    <!-- Tombol Selengkapnya mengarah ke halaman tentang.php -->
                     <a href="tentang.php" class="btn btn-pill-outline">
                         Baca Selengkapnya <i class="fas fa-arrow-right ms-2"></i>
                     </a>
@@ -580,15 +642,12 @@ include 'navbar.php';
      ============================================== -->
 <section id="informasi-sektor" class="py-5" style="background-color: #ffffff; padding-top: 80px !important; padding-bottom: 80px !important;">
     <div class="container">
-        
-        <!-- Judul Informasi Sektor -->
         <div class="text-center mb-5">
             <span class="section-subtitle">Informasi Sektor</span>
             <h2 class="section-title">Prestasi Para Santri</h2>
             <div class="deco-line"></div>
         </div>
         
-        <!-- Grid Berjajar Kesamping -->
         <div class="row g-4 justify-content-center">
             <?php foreach ($prestasi_list as $p): ?>
             <div class="col-lg-4 col-md-6">
@@ -606,15 +665,12 @@ include 'navbar.php';
                         </span>
                     </div>
                     <div class="card-body p-4 text-start">
-                        <!-- Judul Prestasi Kapital -->
                         <h5 class="fw-bold mb-3" style="color: var(--dark-neutral); font-size: 1.15rem; line-height: 1.4; letter-spacing: -0.3px;">
                             <?php echo strtoupper($p['judul']); ?>
                         </h5>
-                        <!-- Deskripsi Prestasi -->
                         <p class="small mb-4" style="color: var(--text-muted-custom); line-height: 1.7; height: 75px; overflow: hidden;">
                             <?php echo htmlspecialchars($p['deskripsi']); ?>
                         </p>
-                        <!-- Footer Kartu -->
                         <div class="pt-3 border-top d-flex justify-content-between align-items-center" style="border-color: rgba(0,0,0,0.05) !important;">
                             <span class="small text-muted fw-medium">Raudlatul Muta'allimin - <?php echo htmlspecialchars($p['tahun']); ?></span>
                         </div>
@@ -631,8 +687,6 @@ include 'navbar.php';
         </div>
     </div>
 </section>
-
-
 
 <!-- ==============================================
      6B. SECTION PARALLAX CALL TO ACTION (CTA)
@@ -658,7 +712,6 @@ include 'navbar.php';
             <div class="deco-line"></div>
         </div>
 
-        <!-- Grid Dokumentasi Mobile Friendly & Clean -->
         <div class="row g-3">
             <?php foreach ($galeri_list as $g): ?>
             <div class="col-lg-4 col-md-6 col-6">
@@ -709,11 +762,10 @@ include 'navbar.php';
     }
 </style>
 
-
 <!-- ==============================================
      6. SECTION BERITA & PENGUMUMAN (DINAMIS DARI DATABASE)
      ============================================== -->
-<section id="berita" class="py-5" style="background-color: var(--light-neutral); padding-top: 80px !important; padding-bottom: 80px !important;">
+<section id="berita" class="py-5" style="background-color: #ffffff; padding-top: 80px !important; padding-bottom: 80px !important;">
     <div class="container">
         <div class="text-center mb-5">
             <span class="section-subtitle">Warta Pesantren</span>
@@ -724,7 +776,7 @@ include 'navbar.php';
         <div class="row g-4">
             <?php foreach ($berita_list as $b): ?>
             <div class="col-lg-4 col-md-6">
-                <div class="card h-100 modern-card" style="background-color: #ffffff !important;">
+                <div class="card h-100 modern-card" style="background-color: var(--light-neutral) !important;">
                     <div class="position-relative overflow-hidden" style="height: 220px;">
                         <?php 
                             $cover_berita = $b['gambar_cover'];
@@ -771,11 +823,10 @@ include 'navbar.php';
     </div>
 </section>
 
-
 <!-- ==============================================
      8. SECTION TESTIMONI ALUMNI (DINAMIS DARI DATABASE)
      ============================================== -->
-<section id="testimoni" class="py-5" style="background-color: #ffffff; padding-top: 80px !important; padding-bottom: 80px !important;">
+<section id="testimoni" class="py-5" style="background-color: var(--light-neutral); padding-top: 80px !important; padding-bottom: 80px !important;">
     <div class="container">
         <div class="text-center mb-5">
             <span class="section-subtitle">Dengar Cerita Mereka</span>
@@ -783,14 +834,13 @@ include 'navbar.php';
             <div class="deco-line"></div>
         </div>
 
-        <!-- Carousel Testimoni Mobile Friendly & Clean -->
         <div id="testimoniCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <?php foreach ($testimoni_list as $index => $t): ?>
                 <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
                     <div class="row justify-content-center">
                         <div class="col-lg-8 col-md-10">
-                            <div class="card p-4 p-md-5 text-center bg-white modern-card" style="background-color: var(--light-neutral) !important;">
+                            <div class="card p-4 p-md-5 text-center bg-white modern-card" style="background-color: #ffffff !important;">
                                 <i class="fas fa-quote-left fs-2 text-opacity-25 mb-4" style="color: var(--kemenag-green-primary) !important; opacity: 0.2 !important;"></i>
                                 <p class="lead mb-4" style="font-size: 1.05rem; line-height: 1.8; font-style: italic; color: var(--text-muted-custom);">
                                     "<?php echo htmlspecialchars($t['isi_testimoni'] ?? $t['isi']); ?>"
@@ -815,7 +865,6 @@ include 'navbar.php';
                 <?php endforeach; ?>
             </div>
             
-            <!-- Kontrol Slider Carousel Minimalis -->
             <button class="carousel-control-prev d-none d-md-flex text-dark" type="button" data-bs-target="#testimoniCarousel" data-bs-slide="prev" style="width: 50px;">
                 <span class="fas fa-arrow-left fs-4" aria-hidden="true" style="color: var(--kemenag-green-primary);"></span>
             </button>
@@ -826,11 +875,10 @@ include 'navbar.php';
     </div>
 </section>
 
-
 <!-- ==============================================
-     9. SECTION HUBUNGI KAMI / KONTAK (CLEAN BOX - TERINTEGRASI DATABASE)
+     9. SECTION HUBUNGI KAMI / KONTAK (CLEAN BOX)
      ============================================== -->
-<section id="kontak" class="py-5" style="background-color: var(--light-neutral); padding-top: 80px !important; padding-bottom: 80px !important;">
+<section id="kontak" class="py-5" style="background-color: #ffffff; padding-top: 80px !important; padding-bottom: 80px !important;">
     <div class="container">
         <div class="text-center mb-5">
             <span class="section-subtitle">Sektor Komunikasi</span>
@@ -839,7 +887,6 @@ include 'navbar.php';
         </div>
 
         <div class="row g-4 align-items-stretch">
-            <!-- Informasi Kontak Minimalis -->
             <div class="col-lg-5">
                 <div class="p-4 p-md-5 rounded-4 text-white h-100 d-flex flex-column justify-content-between" style="background-color: var(--dark-neutral);">
                     <div>
@@ -876,14 +923,12 @@ include 'navbar.php';
                         </div>
                     </div>
 
-                    <!-- Tombol Chat WA Cepat Minimalis -->
                     <a href="https://api.whatsapp.com/send?phone=<?php echo preg_replace('/[^0-9]/', '', $no_telp); ?>" target="_blank" class="btn btn-pill-primary w-100 justify-content-center py-3 mt-4">
                         <i class="fab fa-whatsapp fs-5"></i> Chat Whatsapp Sekarang
                     </a>
                 </div>
             </div>
 
-            <!-- Formulir Kontak Modern Minimalis (PHP POST Action) -->
             <div class="col-lg-7">
                 <div class="card p-4 p-md-5 rounded-4 bg-white h-100" style="border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.03) !important;">
                     <h4 class="fw-bold mb-4" style="color: var(--dark-neutral); letter-spacing: -0.5px;">Kirim Surat Elektronik</h4>
@@ -916,10 +961,68 @@ include 'navbar.php';
     </div>
 </section>
 
-<!-- Eksekusi SweetAlert2 PHP Notifikasi di Sisi Klien -->
-<?php if (!is_null($status_pesan)): ?>
+<!-- ==============================================
+     10. FLOATING BADGE (STATUS PENGEMBANGAN)
+     ============================================== -->
+<div class="dev-badge text-decoration-none" title="Website ini masih dalam tahap pembangunan.">
+    <div class="spinner-grow spinner-grow-sm text-warning" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <span class="fw-bold small m-0 p-0" style="font-size: 0.75rem;">Tahap Pengembangan</span>
+</div>
+
+<!-- Eksekusi SweetAlert2 & JS Fetch Jadwal Sholat -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    // JS Untuk API Jadwal Sholat Aladhan (Gratis & Real-time)
     document.addEventListener("DOMContentLoaded", function() {
+        const url = 'https://api.aladhan.com/v1/timingsByCity?city=Way%20Kanan&country=Indonesia&method=11'; // Method 11 = Kemenag RI
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if(data.code === 200) {
+                    const timings = data.data.timings;
+                    const hijri = data.data.date.hijri;
+                    
+                    // Update kalender Hijriah
+                    document.getElementById('hijri-date').innerText = `${hijri.day} ${hijri.month.en} ${hijri.year} H`;
+                    
+                    // Siapkan array data sholat untuk loop
+                    const prayers = [
+                        { name: 'Subuh', time: timings.Fajr, icon: 'fa-cloud-moon' },
+                        { name: 'Terbit', time: timings.Sunrise, icon: 'fa-sun text-opacity-50' },
+                        { name: 'Dzuhur', time: timings.Dhuhr, icon: 'fa-sun' },
+                        { name: 'Ashar', time: timings.Asr, icon: 'fa-cloud-sun' },
+                        { name: 'Maghrib', time: timings.Maghrib, icon: 'fa-cloud-sun-rain' },
+                        { name: 'Isya', time: timings.Isha, icon: 'fa-moon' }
+                    ];
+                    
+                    // Render HTML
+                    let html = '';
+                    prayers.forEach(p => {
+                        html += `
+                            <div class="col-4 col-md-2">
+                                <div class="prayer-card shadow-sm h-100">
+                                    <i class="fas ${p.icon} prayer-icon"></i>
+                                    <p class="small fw-semibold mb-1 opacity-75">${p.name}</p>
+                                    <h5 class="fw-bold mb-0 text-white">${p.time}</h5>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    document.getElementById('prayer-times-container').innerHTML = html;
+                }
+            })
+            .catch(error => {
+                console.error("Gagal mengambil jadwal sholat:", error);
+                document.getElementById('prayer-loader').innerHTML = '<span class="text-danger"><i class="fas fa-exclamation-triangle"></i> Gagal memuat jadwal sholat.</span>';
+            });
+    });
+
+    // Alert Notifikasi Kirim Pesan
+    <?php if (!is_null($status_pesan)): ?>
         <?php if ($status_pesan === 'success'): ?>
         Swal.fire({
             icon: 'success',
@@ -942,9 +1045,8 @@ include 'navbar.php';
             confirmButtonColor: '#d33'
         });
         <?php endif; ?>
-    });
+    <?php endif; ?>
 </script>
-<?php endif; ?>
 
 <?php
 // Memasukkan footer yang terpusat
