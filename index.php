@@ -420,7 +420,7 @@ include 'navbar.php';
                     </span>
                 </div>
                 <h1 class="display-4 fw-extrabold mb-4 text-dark" style="font-weight: 850; line-height: 1.2; letter-spacing: -1.5px;">
-                    Mendidik Generasi <span style="color: var(--kemenag-green-primary);">Cerdas</span><br>& Berkarakter Islami
+                    Mendidik Generas <span style="color: var(--kemenag-green-primary);">Cerdas</span><br>& Berkarakter Islami
                 </h1>
                 <p class="lead mb-5" style="max-width: 680px; font-size: 1.15rem; line-height: 1.9; color: var(--text-muted-custom);">
                     Menyelenggarakan pendidikan formal terpadu yang memadukan kedalaman spiritual pesantren salafiah dengan keahlian praktis teknologi masa kini di Kasui, Way Kanan, Lampung.
