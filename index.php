@@ -2,7 +2,7 @@
 /**
  * File: index.php
  * Develop by Risky Nurhadi, code with coffe and love <3
- * Mau Clone Code ? Boleh banget. tapi jangan lupa izin ya bang 🗿
+ * Mau Clone Code ? Boleh banget. tapi jangan lupa izin ya ngab 🗿
  * Code nya ada di github riskinurhadi 
  */
 include 'koneksi.php';
