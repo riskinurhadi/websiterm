@@ -1,9 +1,6 @@
 <?php
 /**
  * File: index.php
- * Deskripsi: Halaman Beranda / Index utama pengguna untuk Yayasan Pondok Pesantren Raudlatul Muta'allimin.
- * Mengintegrasikan koneksi.php untuk mengambil data dinamis langsung dari database MySQL Anda.
- * Dilengkapi dengan fallback data otomatis jika tabel database masih kosong.
  */
 
 // Memasukkan file koneksi database
