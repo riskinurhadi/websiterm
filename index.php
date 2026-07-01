@@ -1,24 +1,17 @@
 <?php
 /**
  * File: index.php
- * Deskripsi: Halaman Beranda / Index utama pengguna untuk Yayasan Pondok Pesantren Raudlatul Muta'allimin.
- * Mengintegrasikan koneksi.php untuk mengambil data dinamis langsung dari database MySQL Anda.
- * Dilengkapi dengan fallback data otomatis jika tabel database masih kosong.
+ * Develop by Risky Nurhadi, code with coffe and love <3
+ * Mau Clone Code ? Boleh banget. tapi jangan lupa izin ya bang 🗿
+ * Code nya ada di github riskinurhadi 
  */
-
-// Memasukkan file koneksi database
 include 'koneksi.php';
-
-// ==============================================
-// 1. PROSES FORM HUBUNGI KAMI (PESAN MASUK)
-// ==============================================
 $status_pesan = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kirim_pesan'])) {
     $nama = mysqli_real_escape_string($conn, trim($_POST['nama_pengirim']));
     $email = mysqli_real_escape_string($conn, trim($_POST['email']));
     $subjek = mysqli_real_escape_string($conn, trim($_POST['subjek']));
     $pesan = mysqli_real_escape_string($conn, trim($_POST['pesan']));
-
     if (!empty($nama) && !empty($pesan)) {
         $query_pesan = "INSERT INTO pesan_masuk (nama_pengirim, email, subjek, pesan, status_baca, tanggal_kirim) 
                         VALUES ('$nama', '$email', '$subjek', '$pesan', 'Belum', NOW())";
@@ -31,14 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kirim_pesan'])) {
         $status_pesan = 'validation_error';
     }
 }
-
-// ==============================================
-// 2. QUERY DATA PROFIL WEB (profil_web)
-// ==============================================
 $query_profil = mysqli_query($conn, "SELECT * FROM profil_web WHERE id_profil = 1 LIMIT 1");
 $profil = mysqli_fetch_assoc($query_profil);
-
-// Menerapkan Fallback Data jika Database masih kosong
 $nama_pesantren   = $profil['nama_pesantren'] ?? "Pondok Pesantren Raudlatul Muta'allimin";
 $alamat_pesantren = $profil['alamat'] ?? "Jl. Dr. Ak. Gani, No.50, Jaya Tinggi, Kasui, Way Kanan, Lampung";
 $tentang_pondok   = $profil['tentang_pondok'] ?? "Raudlatul Muta'allimin adalah lembaga pendidikan Islam yang berdiri dengan komitmen kuat untuk mencetak generasi penerus bangsa yang unggul dalam ilmu pengetahuan dan teknologi (IPTEK), serta kokoh dalam iman dan taqwa (IMTAQ). Kami memadukan kurikulum nasional dengan kurikulum kepesantrenan salafiah untuk membentuk karakter santri yang mandiri, berdisiplin, dan berakhlakul karimah.";
